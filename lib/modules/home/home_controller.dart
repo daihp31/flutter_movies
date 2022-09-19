@@ -14,6 +14,9 @@ class HomeController extends ChangeNotifier {
   bool upcomingLoading = true;
   Upcoming? upcoming;
 
+  bool searchLoading = false;
+  Movies? search;
+
   Future loadPopular() async {
     popularLoading = true;
     popular = await movieProvider.getPopular();
@@ -25,6 +28,17 @@ class HomeController extends ChangeNotifier {
     upcomingLoading = true;
     upcoming = await movieProvider.getUpcoming();
     upcomingLoading = false;
+    notifyListeners();
+  }
+
+  Future searchMovies(String? s) async {
+    if (s == null || s.isEmpty) {
+      search = null;
+      return;
+    }
+    searchLoading = true;
+    search = await movieProvider.searchMovies(s);
+    searchLoading = false;
     notifyListeners();
   }
 }
